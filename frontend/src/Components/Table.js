@@ -1,0 +1,36 @@
+import React from 'react';
+import _ from "lodash";
+
+
+
+function Table(props) {
+
+  return (  
+    <div>
+        <table className="match-table"> 
+            <thead> 
+                <tr>
+                    <th className="match-head">match</th>
+                    {_.times(props.matches.num_of_groups, (i) => (
+                        <th className={`group${i+1}-head`} key={`groupstring${i}`}>group {i +1}</th>
+                    ))} 
+                </tr>
+            </thead>
+            <tbody>
+                {props.matches.data.map((item, index)=>(
+                    <tr key={index}>
+                        <td>{props.text_area.substring(item.match.start, item.match.end)}</td>
+                        {item.groups.map((group,index)=>(
+                            <td key={`groupstart${group.start}end${group.end}index${index}`}>{props.text_area.substring(group.start, group.end)}</td>
+                        ))}
+                    </tr>
+                )
+            )
+            }   
+            </tbody>
+        </table>
+    </div>
+  );
+}
+
+export default Table;
