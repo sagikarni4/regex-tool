@@ -12,7 +12,7 @@ function Table(props) {
                 <tr>
                     <th className="match-head">match</th>
                     {_.times(props.matches.num_of_groups, (i) => (
-                        <th className={`group${i+1}-head`} key={`groupstring${i}`}>group {i +1}</th>
+                        <th className={ i > 1? 'match-head' : `group${i+1}-head`} key={`groupstring${i}`}>group {i +1}</th>
                     ))} 
                 </tr>
             </thead>

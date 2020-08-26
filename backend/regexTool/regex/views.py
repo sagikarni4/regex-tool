@@ -10,6 +10,7 @@ from .models import Regex
 from .serializers import *
 import re
 
+
 class Data:
     def __init__(self, regex_array, num_of_groups):
         self.data = regex_array
@@ -30,10 +31,26 @@ def regex_handler(request):
         serializer = RegexSerializer(data=request.data)
         if serializer.is_valid():
             regex_area = serializer.data.get('regex_area')
-            text_area = request.data.get('text_area')
+            text_area = serializer.data.get('text_area')
+            flagsObj = serializer.data.get('flags')
+            flags = 0
+            if flagsObj.get('s'):
+                flags = flags | re.DOTALL
+            if flagsObj.get('i'):
+                flags = flags | re.IGNORECASE
+            if flagsObj.get('m'):
+                flags = flags | re.MULTILINE
+            if flagsObj.get('l'):
+                flags = flags | re.LOCALE
+            if flagsObj.get('x'):
+                flags = flags | re.VERBOSE
+            if flagsObj.get('u'):
+                flags = flags | re.UNICODE
+
+            regex_area = re.sub(ur'\\u(\w\w\w\w)',lambda m: unichr(int(m.group(1), 16)),regex_area)
             regex_obj_array = []
             num_of_groups = 0
-            for match in re.finditer(r'(%s)' % regex_area, text_area, re.IGNORECASE | re.DOTALL):
+            for match in re.finditer(r'(%s)' % regex_area, text_area, flags):
                 num_of_groups = len(match.groups()) -1
                 groups = []
                 if (len(match.groups()) > 1):

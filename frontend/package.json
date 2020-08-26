@@ -15,7 +15,8 @@
     "react-dom": "^16.13.1",
     "react-highlight-textarea": "^1.0.0",
     "react-highlight-within-textarea": "^0.9.11",
-    "react-scripts": "3.4.1",
+    "react-highlighted-textarea": "0.0.2",
+    "react-scripts": "^3.4.3",
     "react-textarea-highlight": "github:sudodoki/react-textarea-highlight"
   },
   "scripts": {
