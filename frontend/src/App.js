@@ -20,6 +20,11 @@ function App() {
   const [i, setI] = useState(0)
   const [flags, setFlags] = useState({i: true, s: true, l : false, x: false, u:false, m:false })
 
+  function removeEmojis (string) {
+    var regex = /(?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff]|[\u0023-\u0039]\ufe0f?\u20e3|\u3299|\u3297|\u303d|\u3030|\u24c2|\ud83c[\udd70-\udd71]|\ud83c[\udd7e-\udd7f]|\ud83c\udd8e|\ud83c[\udd91-\udd9a]|\ud83c[\udde6-\uddff]|\ud83c[\ude01-\ude02]|\ud83c\ude1a|\ud83c\ude2f|\ud83c[\ude32-\ude3a]|\ud83c[\ude50-\ude51]|\u203c|\u2049|[\u25aa-\u25ab]|\u25b6|\u25c0|[\u25fb-\u25fe]|\u00a9|\u00ae|\u2122|\u2139|\ud83c\udc04|[\u2600-\u26FF]|\u2b05|\u2b06|\u2b07|\u2b1b|\u2b1c|\u2b50|\u2b55|\u231a|\u231b|\u2328|\u23cf|[\u23e9-\u23f3]|[\u23f8-\u23fa]|\ud83c\udccf|\u2934|\u2935|[\u2190-\u21ff])/g;
+    return string.replace(regex, '');
+  }
+
   function isValidRegex(text){
     if (text.includes('[]'))
       return false
@@ -51,7 +56,7 @@ function App() {
     e.preventDefault()
     if (matches){
     let content =  document.getElementById("text-area")
-    let match =  document.getElementsByClassName("match")[i]
+    let match =  document.querySelectorAll(".match")[i]
     content.scrollTop = await match.offsetTop
     if (i === matches.data.length - 1){
       setI(0)
@@ -59,12 +64,12 @@ function App() {
     let check = true
     let y = i
     while(check){
-      if(y+1 >= document.getElementsByClassName("match").length){
+      if(y+1 >= document.querySelectorAll(".match").length){
         check = false
         setI(0)
       }
       else{
-        if(document.getElementsByClassName("match")[y].offsetTop === document.getElementsByClassName("match")[y+1].offsetTop){
+        if(document.querySelectorAll(".match")[y].offsetTop === document.querySelectorAll(".match")[y+1].offsetTop){
           y++
       }
       else{
@@ -77,6 +82,7 @@ function App() {
     }
     }
 
+
   async function addText(e){
       e.preventDefault()
       let {name, value} = e.target
@@ -84,8 +90,8 @@ function App() {
         case 'text-area':
             setTyping(true)
             setI(0)
+            setTextArea(removeEmojis(value))
             _.debounce(()=>setTyping(false),1000)()
-            setTextArea(value)
             break
         case 'regex-area':
             setTyping(true)
@@ -193,6 +199,7 @@ function App() {
     }
     , [matches])
 
+  
   return (
     
     <>
@@ -203,6 +210,15 @@ function App() {
       </Flags>
 
       <main className = "main-container">
+
+        {/* <div class="container">
+          <div class="backdrop" id='backdrop'>
+            <div class="highlights" dangerouslySetInnerHTML={{ __html: htmlDecode(highlights) }}>
+            </div>
+          </div>
+          <textarea onChange = {addText} value = {text_area } id="text-area" name = "text-area" className = "text-area"/>
+        </div> */}
+
           <div>
               <HighlightWithinTextarea
               highlight = {highlight}
@@ -212,11 +228,12 @@ function App() {
               name = "text-area"
               id="text-area"
               containerClassName = "text-area-container"
+              placeholder="Content goes here..."
               />
-          </div>
-         
+         </div>
+
          <div>
-            <textarea className = "regex-area" onChange = {addText} value = {regex_area} name = "regex-area"/>
+            <textarea className = "regex-area" onChange = {addText} value = {regex_area} name = "regex-area"  placeholder="Regex goes here..."/>
             <div className="data-area">
               {matches &&  matches.data.length >0 ? <button className="btn" onClick={scrollToMatch}>Next Match </button>: <div></div>}  
               {matches && matches.data.length > 1 && <div className="num-matches">{`${matches.data.length} matches found`}</div>}
