@@ -17,7 +17,9 @@
     "react-highlight-within-textarea": "^0.9.11",
     "react-highlighted-textarea": "0.0.2",
     "react-scripts": "^3.4.3",
-    "react-textarea-highlight": "github:sudodoki/react-textarea-highlight"
+    "react-textarea-highlight": "github:sudodoki/react-textarea-highlight",
+    "utf8": "^3.0.0",
+    "xregexp": "^4.3.0"
   },
   "scripts": {
     "start": "react-scripts start",

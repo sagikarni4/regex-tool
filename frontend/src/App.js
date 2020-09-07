@@ -20,10 +20,6 @@ function App() {
   const [i, setI] = useState(0)
   const [flags, setFlags] = useState({i: true, s: true, l : false, x: false, u:false, m:false })
 
-  function removeEmojis (string) {
-    var regex = /(?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff]|[\u0023-\u0039]\ufe0f?\u20e3|\u3299|\u3297|\u303d|\u3030|\u24c2|\ud83c[\udd70-\udd71]|\ud83c[\udd7e-\udd7f]|\ud83c\udd8e|\ud83c[\udd91-\udd9a]|\ud83c[\udde6-\uddff]|\ud83c[\ude01-\ude02]|\ud83c\ude1a|\ud83c\ude2f|\ud83c[\ude32-\ude3a]|\ud83c[\ude50-\ude51]|\u203c|\u2049|[\u25aa-\u25ab]|\u25b6|\u25c0|[\u25fb-\u25fe]|\u00a9|\u00ae|\u2122|\u2139|\ud83c\udc04|[\u2600-\u26FF]|\u2b05|\u2b06|\u2b07|\u2b1b|\u2b1c|\u2b50|\u2b55|\u231a|\u231b|\u2328|\u23cf|[\u23e9-\u23f3]|[\u23f8-\u23fa]|\ud83c\udccf|\u2934|\u2935|[\u2190-\u21ff])/g;
-    return string.replace(regex, '');
-  }
 
   function isValidRegex(text){
     if (text.includes('[]'))
@@ -90,7 +86,7 @@ function App() {
         case 'text-area':
             setTyping(true)
             setI(0)
-            setTextArea(removeEmojis(value))
+            setTextArea(value)
             _.debounce(()=>setTyping(false),1000)()
             break
         case 'regex-area':
@@ -133,17 +129,20 @@ function App() {
           matches.data.map(item=>{
             newHigh = [...newHigh,
             {
-              highlight : [item.match.start, item.match.end],
+              highlight : [[...text_area].slice(0,item.match.start).join('').length,
+                          [...text_area].slice(0,item.match.end).join('').length ],
               className: 'match',
             },
             {
-              highlight : [item.groups[0].start, item.groups[0].end],
+              highlight : [[...text_area].slice(0,item.groups[0].start).join('').length,
+                          [...text_area].slice(0,item.groups[0].end).join('').length],
               className : 'group1'
             },
             {
-              highlight : [item.groups[1].start, item.groups[1].end],
+              highlight : [[...text_area].slice(0,item.groups[1].start).join('').length,
+                          [...text_area].slice(0,item.groups[1].end).join('').length],
               className : 'group2'
-            }
+            },
            ]
            return newHigh
           }
@@ -156,12 +155,13 @@ function App() {
             matches.data.map(item=>{
               newHigh = [...newHigh,
               {
-                highlight : [item.match.start, item.match.end],
-                className: 'match'
-
+                highlight : [[...text_area].slice(0,item.match.start).join('').length,
+                            [...text_area].slice(0,item.match.end).join('').length ],
+                className: 'match',
               },
               {
-                highlight : [item.groups[0].start, item.groups[0].end],
+                highlight : [[...text_area].slice(0,item.groups[0].start).join('').length,
+                            [...text_area].slice(0,item.groups[0].end).join('').length],
                 className : 'group1'
               }
              ]
@@ -173,15 +173,17 @@ function App() {
           else{
               if(matches.data.length>0){
                   let newHigh = []
-                  matches.data.map(item=>(
+                  matches.data.map(item=>{
+                    console.log(item.match.start + item.match.start -[...text_area.substring(0,item.match.start)].length)
                     newHigh = [...newHigh,
                     {
-                      highlight : [item.match.start, item.match.end],
-                      //highlight : [...text_area].slice(item.match.start,item.match.end).join(''),
+                      highlight : [[...text_area].slice(0,item.match.start).join('').length,
+                                  [...text_area].slice(0,item.match.end).join('').length ],
                       className: 'match',
                     }
                    ]
-                    ))
+                   return newHigh
+                    })
                     setHighlight(newHigh)
                 }
               else{
@@ -197,7 +199,7 @@ function App() {
       }
      
     }
-    , [matches])
+    , [matches, text_area])
 
   
   return (
@@ -211,20 +213,12 @@ function App() {
 
       <main className = "main-container">
 
-        {/* <div class="container">
-          <div class="backdrop" id='backdrop'>
-            <div class="highlights" dangerouslySetInnerHTML={{ __html: htmlDecode(highlights) }}>
-            </div>
-          </div>
-          <textarea onChange = {addText} value = {text_area } id="text-area" name = "text-area" className = "text-area"/>
-        </div> */}
-
           <div>
               <HighlightWithinTextarea
               highlight = {highlight}
               className = "text-area"
               onChange = {addText}
-              value = {text_area }
+              value = {text_area}
               name = "text-area"
               id="text-area"
               containerClassName = "text-area-container"

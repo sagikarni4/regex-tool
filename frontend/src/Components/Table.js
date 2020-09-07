@@ -19,9 +19,11 @@ function Table(props) {
             <tbody>
                 {props.matches.data.map((item, index)=>(
                     <tr key={index}>
-                        <td>{props.text_area.substring(item.match.start, item.match.end)}</td>
+                        <td>{[...props.text_area].slice(item.match.start,item.match.end).join('')}</td>
                         {item.groups.map((group,index)=>(
-                            <td key={`groupstart${group.start}end${group.end}index${index}`}>{props.text_area.substring(group.start, group.end)}</td>
+                            <td key={`groupstart${group.start}end${group.end}index${index}`}>
+                                {[...props.text_area].slice(group.start, group.end).join('')
+                            }</td>
                         ))}
                     </tr>
                 )
