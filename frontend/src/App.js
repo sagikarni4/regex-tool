@@ -86,7 +86,7 @@ function App() {
         case 'text-area':
             setTyping(true)
             setI(0)
-            setTextArea(value)
+            setTextArea(value.replace('&','&amp;'))
             _.debounce(()=>setTyping(false),1000)()
             break
         case 'regex-area':
