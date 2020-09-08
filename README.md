@@ -10,6 +10,5 @@ Usage
     $ python manage.py runserver
     
  ```
-
 Fixed the emoji issue 🥳
 ----------
