@@ -12,7 +12,8 @@ import re
 
 
 class Data:
-    def __init__(self, regex_array, num_of_groups):
+    def __init__(self, newContent, regex_array, num_of_groups):
+        self.newContent = newContent
         self.data = regex_array
         self.num_of_groups = num_of_groups
 
@@ -48,18 +49,36 @@ def regex_handler(request):
                 flags = flags | re.UNICODE
 
             regex_area = re.sub(ur'\\u(\w\w\w\w)',lambda m: unichr(int(m.group(1), 16)),regex_area)
+
             regex_obj_array = []
             num_of_groups = 0
+            match_me = {}
+            newContent = ""
+            string_list = list(text_area)
             for match in re.finditer(r'(%s)' % regex_area, text_area, flags):
                 num_of_groups = len(match.groups()) -1
                 groups = []
-                if (len(match.groups()) > 1):
-                    for i in range(2, len(match.groups()) + 1):
+                for i in range(1, len(match.groups()) + 1):
+                    if i==1:
+                        string_list[match.start(i)] = "-+-+match" + string_list[match.start(i)] 
+                        string_list[match.end(i)-1] += '+-+-' 
+                        match_me ={'start': match.start(i), 'end': match.end(i)}
+                    else:
+                        string_list[match.start(i)] = "-+-+%s" % (i-1) + string_list[match.start(i)]
+                        string_list[match.end(i)-1] += '+-+-' 
                         groups.append({'start': match.start(i), 'end': match.end(i)})
-                regex_obj = RegexObj({'start': match.start(1), 'end': match.end(1)}, groups)
+                
+                regex_obj = RegexObj(match_me, groups)
                 regex_obj_array.append(regex_obj.__dict__)
 
-            data = Data(regex_obj_array, num_of_groups)
+            newContent = ''.join(string_list)
+            newContent = newContent.replace(">","&gt;")
+            newContent = newContent.replace("<","&lt;")
+            newContent = newContent.replace("-+-+match","<span class='match'>" )
+            newContent = newContent.replace("+-+-","</span>" )
+            for i in range(1, num_of_groups + 1):
+                newContent = newContent.replace("-+-+%d" %i ,"<span class='group%d'>" % i )
+            data = Data(newContent, regex_obj_array, num_of_groups)
 
 
 

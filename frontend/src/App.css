@@ -1,6 +1,9 @@
+@import url('https://fonts.googleapis.com/css?family=Asap:400,700');
+
+
 *{
-  /* font-family: 'Times New Roman', Times, serif; */
-  font-size: 1vw;
+   font:  'Asap', sans-serif; 
+   font-size: 16px;
 }
 
 
@@ -9,26 +12,77 @@
 }
 
 .main-container{
-  margin-top:2vh;
-  margin-left: 2vw;
-  margin-bottom: 2vh;
-  margin-right: 2vw;
+  height: 90vh;
+  margin-top:1vh;
+  margin-left: 1vw;
+  margin-bottom: 1vh;
+  margin-right: 1vw;
 }
 
+.container {
+  margin: 0 auto;
+  display: block;
+  position: relative;
+  height: 90vh;
+  width: 46vw;
+  top:0;
+  left:0;
+  -webkit-text-size-adjust: none;
+
+}
 
 .main-container {
   display: grid;
   grid-template-columns: auto auto;
 }
 
+textarea {
+  margin: 0;
+  border-radius: 0;
+}
+.backdrop {
+  position: absolute;
+  overflow: auto;
+  z-index: 1;
+  border: 1px solid black;
+  height: 90vh;
+  width: 46vw;
+  top: 0;
+  left: 0;
+  margin: 5px 5px 5px 5px;
+  background-color: gainsboro;
+
+}
+
+.highlights {
+  position: absolute;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  height: 90vh;
+  width: 46vw;
+  border-color: black;
+  border-width: 1px;
+  cursor: auto;
+  top: 0;
+  left: 0;
+  letter-spacing: 1px;
+  background-color: gainsboro;
+}
 
 .text-area {
   height: 90vh;
   width: 46vw;
-  resize: none;
-  border-style: inset;
-  border-width: 1px;
+  border: 1px solid black;
   cursor: auto;
+  background-color: transparent;
+  z-index: 2;
+  resize: none;
+  position: absolute;
+  display: block;
+  top: 0;
+  left: 0;
+  letter-spacing: 1px;
+  margin: 5px 5px 5px 5px;
 
 }
 .data-area{
@@ -36,7 +90,7 @@
   grid-template-columns: repeat(8, 1fr);
   grid-gap: 10px;
   grid-template-areas: 
-  "a a b b b c c c c c c c c "
+  "d d a a b b b c c c c c c c c "
 }
 
 .match-table
@@ -105,7 +159,7 @@ th::before{
 table {
   border-collapse: separate;
   display:block;
-  height: 61vh;
+  height: 62vh;
   width: 46vw;
   overflow: scroll;
 
@@ -126,30 +180,18 @@ table {
   -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
 }
 
-
-
-.text-area-container {
-  margin: 5px 5px 5px 5px;
-  width: 46vw;
-  cursor: auto;
-
-
-}
 .match {
   background-color: #b1d5e5;
-  color: transparent;
   border-radius: 3px;
 }
 
 .group1 {
   background-color: greenyellow;
-  color: transparent;
   border-radius: 3px;
 }
 
 .group2 {
   background-color: orchid;
-  color: transparent;
   border-radius: 3px;
 }
 
@@ -159,19 +201,23 @@ table {
   height: 20vh;
   width: 46vw;
   resize: none;
-  background-color: gainsboro;
   border-style: inset;
   border-width: 1px;
   margin: 5px 5px 5px 5px;
-
 }
 
 .btn{
   background:crimson;
   height:  fit-content;
-  grid-area: a;
   margin-left: 5px;
+}
 
+.next-match-btn{
+  grid-area: a;
+}
+
+.search-btn{
+  grid-area: d;
 }
 
 .num-matches{
@@ -228,7 +274,7 @@ ul {
 .dropdown{
   position: absolute;
   top:58px;
-  width: 200px;
+  width: 12vw;
   transform: translateX(-45%);
   background-color: #484a4d;
   overflow: hidden;
