@@ -6,6 +6,11 @@
    font-size: 16px;
 }
 
+.loader{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+}
 
 .App {
   text-align: center;
@@ -88,9 +93,9 @@ textarea {
 .data-area{
   display: grid;
   grid-template-columns: repeat(8, 1fr);
-  grid-gap: 10px;
+  grid-gap: 30px;
   grid-template-areas: 
-  "d d a a b b b c c c c c c c c "
+  "d d a a b b e e e e "
 }
 
 .match-table
@@ -218,13 +223,21 @@ table {
 
 .search-btn{
   grid-area: d;
+  padding-left: 10px;
 }
 
 .num-matches{
   font-size: 18px;
-  padding-right: 10px;
-  padding-left: 5px;
+  padding-right: 5px;
+  padding-left: 10px;
   grid-area: b;
+}
+
+.duration{
+  font-size: 18px;
+  padding-right: 5px;
+  /* padding-left: 5px; */
+  grid-area: e;
 }
 
 

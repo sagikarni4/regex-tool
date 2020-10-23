@@ -4,7 +4,7 @@ from rest_framework import status
 from django.http import JsonResponse
 
 from django.shortcuts import render
-
+import time
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import Regex
 from .serializers import *
@@ -12,10 +12,11 @@ import re
 
 
 class Data:
-    def __init__(self, newContent, regex_array, num_of_groups):
+    def __init__(self, newContent, regex_array, num_of_groups, duration):
         self.newContent = newContent
         self.data = regex_array
         self.num_of_groups = num_of_groups
+        self.duration = duration
 
 class RegexObj:
     def __init__(self, match, groups):
@@ -55,6 +56,7 @@ def regex_handler(request):
             match_me = {}
             newContent = ""
             string_list = list(text_area)
+            now = int(time.time()*1000)
             for match in re.finditer(r'(%s)' % regex_area, text_area, flags):
                 num_of_groups = len(match.groups()) -1
                 groups = []
@@ -78,7 +80,12 @@ def regex_handler(request):
             newContent = newContent.replace("+-+-","</span>" )
             for i in range(1, num_of_groups + 1):
                 newContent = newContent.replace("-+-+%d" %i ,"<span class='group%d'>" % i )
-            data = Data(newContent, regex_obj_array, num_of_groups)
+            duration = int(time.time()*1000) - now
+            if duration>1000:
+                duration = str(duration/1000) + ' s'
+            else:
+                duration = str(duration) + ' ms'
+            data = Data(newContent, regex_obj_array, num_of_groups, duration)
 
 
 

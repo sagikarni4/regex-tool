@@ -6,6 +6,7 @@ import Flags from './Components/Flags'
 import FlagItem from './Components/FlagItem'
 import DropdownMenu from './Components/DropdownMenu'
 import _ from 'lodash'
+import Spinner from 'react-bootstrap/Spinner';
 
 
 
@@ -18,6 +19,7 @@ function App() {
   const [i, setI] = useState(0)
   const [editContent, setEditContent] = useState(false)
   const [flags, setFlags] = useState({i: true, s: true, l : false, x: false, u:false, m:false })
+  const [waiting, setWating] =useState(false)
   const textareaRef = useRef()
   const highlightsRef = useRef()
 
@@ -39,8 +41,10 @@ function App() {
 
   async function askService(data){
     try{
+      setWating(true)
       const resp = await axios.post('http://localhost:8000/api/', data)
       setMatches(resp.data)
+      setWating(false)
     }
     catch(e){
       console.log(e)
@@ -124,21 +128,17 @@ function App() {
     },
      [regex_area, text_area, typing, flags, editContent])
 
- 
-    // function handleScroll(e){
-    //   if (regex_area.length>0){
-    //     highlightsRef.current.scrollTop =  textareaRef.current.scrollTop
-    //     highlightsRef.current.scrollLeft = textareaRef.current.scrollLeft
-    //     console.log('backdrop' + highlightsRef.current.scrollTop)
-    //     console.log('textarea' + textareaRef.current.scrollTop)
-
-    //   }
-    // }
-  
   
   return (
     
     <>
+      {
+        waiting&&
+          <div className="loader">
+            <Spinner animation="border" variant='danger' />
+          </div>
+      }
+      
       <Flags>
           <FlagItem icon={<i className="far fa-flag"></i>}>
               <DropdownMenu flags = {flags} setFlags= {setFlags}/>
@@ -146,6 +146,7 @@ function App() {
       </Flags>
 
       <main className = "main-container">
+      
         <div className="container">
           {regex_area.length<=0  || !matches  || matches.newContent<=0 || editContent?
             <textarea
@@ -186,6 +187,7 @@ function App() {
               {matches && matches.data.length > 1  && !editContent && <div className="num-matches">{`${matches.data.length} matches found`}</div>}
               {matches && matches.data.length === 1 && !editContent && <div className="num-matches">{`${matches.data.length} match found`}</div>}
               {matches && matches.data.length < 1  && !editContent && <div className="num-matches">No matches found</div>}
+              {matches && matches.data.length > 0  && !editContent && <div className="duration">{`duration: ${matches.duration}`}</div>}
             </div>
               {matches  && matches.data.length>0 && !editContent && <Table matches = {matches} text_area = {text_area}/>}
          </div>
