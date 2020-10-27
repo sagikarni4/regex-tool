@@ -66,7 +66,10 @@ def regex_handler(request):
                         string_list[match.end(i)-1] += '+-+-' 
                         match_me ={'start': match.start(i), 'end': match.end(i)}
                     else:
-                        string_list[match.start(i)] = "-+-+%s" % (i-1) + string_list[match.start(i)]
+                        if '-+-+match' in string_list[match.start(i)]:
+                            string_list[match.start(i)] = "-+-+match-+-+%s" % (i-1) + text_area[match_me.get('start')]
+                        else:
+                             string_list[match.start(i)] = "-+-+%s" % (i-1) + string_list[match.start(i)]
                         string_list[match.end(i)-1] += '+-+-' 
                         groups.append({'start': match.start(i), 'end': match.end(i)})
                 
@@ -76,10 +79,11 @@ def regex_handler(request):
             newContent = ''.join(string_list)
             newContent = newContent.replace(">","&gt;")
             newContent = newContent.replace("<","&lt;")
-            newContent = newContent.replace("-+-+match","<span class='match'>" )
-            newContent = newContent.replace("+-+-","</span>" )
             for i in range(1, num_of_groups + 1):
                 newContent = newContent.replace("-+-+%d" %i ,"<span class='group%d'>" % i )
+            newContent = newContent.replace("-+-+match","<span class='match'>" )
+            newContent = newContent.replace("+-+-","</span>" )
+           
             duration = int(time.time()*1000) - now
             if duration>1000:
                 duration = str(duration/1000) + ' s'

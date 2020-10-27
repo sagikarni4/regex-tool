@@ -164,22 +164,11 @@ function App() {
                   <div className="highlights" id="highlights" dangerouslySetInnerHTML={{ __html: matches.newContent}}>
                   </div>
               </div>
-              {/* <textarea
-                highlight = {highlight}
-                className = "text-area"
-                onChange = {addText}
-                value = {text_area}
-                name = "text-area"
-                id="text-area"
-                placeholder="Content goes here..."
-                onScroll={e=>handleScroll(e)}
-                ref={textareaRef}
-              />         */}
             </>   
           }
         </div>
 
-         <div>
+         <div className="right-area">
             <textarea className = "regex-area" onChange = {addText} value = {regex_area} name = "regex-area"  placeholder="Regex goes here..."/>
             <div className="data-area">
               {matches &&  matches.data.length >0 && !editContent ? <button className="btn next-match-btn" onClick={scrollToMatch}>Next Match </button>: <div></div>}
