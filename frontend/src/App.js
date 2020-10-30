@@ -39,18 +39,6 @@ function App() {
     return true
   }
 
-  async function askService(data){
-    try{
-      setWating(true)
-      const resp = await axios.post('http://localhost:8000/api/', data)
-      setMatches(resp.data)
-      setWating(false)
-    }
-    catch(e){
-      console.log(e)
-    }
-  }
-
 
   async function scrollToMatch(e){
     e.preventDefault()
@@ -106,6 +94,7 @@ function App() {
       }
   }
   useEffect(()=>{
+    let cancel
 
     if(regex_area.length===0 || text_area.length===0){
       setEditContent(false)
@@ -117,7 +106,18 @@ function App() {
         flags
       }
       if (text_area && regex_area && isValidRegex(regex_area) && !typing && !editContent){
-          askService(data)
+          setWating(true)
+          axios({
+            method: 'POST',
+            url: 'http://localhost:8000/api/',
+            data: data,
+            cancelToken: new axios.CancelToken(c=> cancel=c)
+          }).then(resp=>setMatches(resp.data))
+          .catch(e=>{
+            if(axios.isCancel(e)) return
+          })
+          setWating(false)
+          return ()=> cancel()
       }
       else{
         if (!regex_area || !text_area){
