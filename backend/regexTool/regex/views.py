@@ -68,6 +68,7 @@ def regex_handler(request):
                     else:
                         if '-+-+match' in string_list[match.start(i)]:
                             string_list[match.start(i)] = "-+-+match-+-+%s" % (i-1) + text_area[match_me.get('start')]
+                            string_list[match.end(i) - 1] += '+-+-'
                         else:
                              string_list[match.start(i)] = "-+-+%s" % (i-1) + string_list[match.start(i)]
                         string_list[match.end(i)-1] += '+-+-' 

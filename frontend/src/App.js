@@ -19,7 +19,6 @@ function App() {
   const [i, setI] = useState(0)
   const [editContent, setEditContent] = useState(false)
   const [flags, setFlags] = useState({i: true, s: true, l : false, x: false, u:false, m:false })
-  const [waiting, setWating] =useState(false)
   const textareaRef = useRef()
   const highlightsRef = useRef()
 
@@ -76,17 +75,25 @@ function App() {
       let {name, value} = e.target
       switch(name){
         case 'text-area':
-            setTyping(true)
+            if(regex_area && !editContent){
+              setTyping(true)
+            }
             setI(0)
             setTextArea(value)
-            _.debounce(()=>setTyping(false),1000)()
+            if(regex_area && !editContent){
+            _.debounce(()=>setTyping(false),500)()
+            }
             break
         case 'regex-area':
-            setTyping(true)
-            setI(0)
-            _.debounce(()=>setTyping(false),1000)()
-            setRegexArea(value)
-            break
+          if(text_area && !editContent){
+             setTyping(true)
+          }
+          setI(0)
+          if(text_area && !editContent){
+          _.debounce(()=>setTyping(false),500)()
+          }
+          setRegexArea(value)
+          break
         default:
             setRegexArea("")
             setTextArea("")
@@ -106,7 +113,6 @@ function App() {
         flags
       }
       if (text_area && regex_area && isValidRegex(regex_area) && !typing && !editContent){
-          setWating(true)
           axios({
             method: 'POST',
             url: 'http://localhost:8000/api/',
@@ -116,7 +122,6 @@ function App() {
           .catch(e=>{
             if(axios.isCancel(e)) return
           })
-          setWating(false)
           return ()=> cancel()
       }
       else{
@@ -133,7 +138,7 @@ function App() {
     
     <>
       {
-        waiting&&
+        typing&&
           <div className="loader">
             <Spinner animation="border" variant='danger' />
           </div>
@@ -144,7 +149,6 @@ function App() {
               <DropdownMenu flags = {flags} setFlags= {setFlags}/>
           </FlagItem>
       </Flags>
-
       <main className = "main-container">
       
         <div className="container">
@@ -178,7 +182,7 @@ function App() {
               {matches && matches.data.length < 1  && !editContent && <div className="num-matches">No matches found</div>}
               {matches && matches.data.length > 0  && !editContent && <div className="duration">{`duration: ${matches.duration}`}</div>}
             </div>
-              {matches  && matches.data.length>0 && !editContent && <Table matches = {matches} text_area = {text_area}/>}
+              {matches && !typing && matches.data.length>0 && !editContent && <Table matches = {matches} text_area = {text_area}/>}
          </div>
       </main>
 

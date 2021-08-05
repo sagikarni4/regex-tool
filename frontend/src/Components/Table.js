@@ -8,7 +8,7 @@ function Table(props) {
 
     const [pagination, setPagination] = useState({
         offset: 0,
-        numberPerPage: 100,
+        numberPerPage: 50,
         pageCount: 0,
         pageNum : 0,
         currentData: []
