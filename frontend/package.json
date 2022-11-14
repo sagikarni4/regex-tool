@@ -24,7 +24,7 @@
     "react-infinite-scroll-component": "^5.1.0",
     "react-loader-spinner": "^3.1.14",
     "react-paginate": "^6.5.0",
-    "react-scripts": "^3.4.4",
+    "react-scripts": "^5.0.1",
     "react-text-highlighter": "0.0.5",
     "react-textarea-highlight": "github:sudodoki/react-textarea-highlight",
     "react-virtualized": "^9.22.2",
